@@ -19,5 +19,10 @@ Download and unzip the directory, open MATLAB, and then navigate to wherever you
 4. Identifies peak RSS within each segment and extracts pattern of activity (parcel time series) and edge time series (co-fluctuation) at that instant.
 5. Makes a couple figures.
 
+# if you want to apply this method to your data
+* Simply replace the "ts.mat" variable with a [time x node] matrix of neural recordings.
+
+Runtime for entire script is approximately 30 s.
+
 If you use this code, please cite:
 R Betzel, S Cutts, S Greenwell, O Sporns (2021). Individualized event structure drives individual differences in whole-brain functional connectivity. bioRxiv [link to paper](https://www.biorxiv.org/content/10.1101/2021.03.12.435168v1.abstract)
