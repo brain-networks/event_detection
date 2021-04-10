@@ -1,6 +1,12 @@
 # event_detection
 Perform event detection as in Betzel et al (2021):  Individualized event structure drives individual differences in whole-brain functional connectivity
 
+# dependencies and requirements
+This script uses MATLAB. It was tested using MATLAB 2020a on macOS Mojava 10.14.6. It requires no additional software packages.
+
+# installation and usage
+Download and unzip the directory, open MATLAB, and then navigate to wherever you downloaded the files. You can run the script from within that directory.   
+
 # what is here
 * Example parcellated resting fMRI BOLD time series from [here](https://www.dropbox.com/sh/tb694nmpu2lbpnc/AABKU_Mew7hyjtAC4ObzGVaKa?dl=0).
 * System labels for each brain region.
