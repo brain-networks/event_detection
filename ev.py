@@ -33,7 +33,7 @@ def event_detection(DATA_file,atlas,surrprefix='',sursufix='',segments=True):
             strategy="mean",
         )
 
-    data = masker.fit_transform(opj(DIR, DATA_file))
+    data = masker.fit_transform(DATA_file)
     # load and zscore time series
     z_ts=zscore(data,ddof=1)
     # Get number of time points/nodes
