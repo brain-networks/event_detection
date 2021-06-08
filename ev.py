@@ -108,3 +108,23 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
     # calculate mean co-fluctuation (edge time series) across all peaks
     mu = np.nanmean(etspeaks, 0)
     return ets, rss, rssr, idxpeak, etspeaks, mu
+
+
+def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile):
+    """
+    Threshold the edge time-series matrix based on the selected time-points and the surrogate matrices.
+    """
+
+    # Initialize matrix with zeros
+    thresholded_matrix = np.zeros(ets_matrix.shape)
+
+    # Get selected columns from ETS matrix
+    thresholded_matrix[:, selected_idxs] = ets_matrix[:, selected_idxs]
+
+    # Calculate the percentile threshold from surrogate matrix
+    thr = np.percentile(surr_ets_matrix, percentile)
+
+    # Threshold ETS matrix based on surrogate percentile
+    thresholded_matrix[thresholded_matrix < thr] = 0
+
+    return thresholded_matrix
