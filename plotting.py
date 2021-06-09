@@ -12,6 +12,7 @@ nRAND = 100
 DIR = "/bcbl/home/public/PARK_VFERRER/PFM_data"
 TEMP = "/bcbl/home/public/PARK_VFERRER/PFM_data/temp_" + subject + "_" + nROI
 ats = np.loadtxt(opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor_ATS_abs.1D"))
+ATLAS_file = opj(TEMP, "atlas.nii.gz")
 FIGSIZE = (25, 20)
 
 
@@ -173,9 +174,7 @@ def main():
         etspeaks_beta,
         mu_beta,
         _,
-    ) = ev.event_detection(
-        DATA_file, opj(TEMP, "atlas.nii.gz"), opj(TEMP, "surrogate_"), "_beta"
-    )
+    ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"), "_beta")
 
     # Perform event detection on ORIGINAL data
     DATA_file = opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
@@ -187,9 +186,7 @@ def main():
         etspeaks_orig_sur,
         mu_orig_sur,
         _,
-    ) = ev.event_detection(
-        DATA_file, opj(TEMP, "atlas.nii.gz"), opj(TEMP, "surrogate_")
-    )
+    ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"))
 
     # Perform event detection on FITTED signal
     DATA_file = opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt.nii.gz")
@@ -201,9 +198,7 @@ def main():
         etspeaks_fitt,
         mu_fitt,
         _,
-    ) = ev.event_detection(
-        DATA_file, opj(TEMP, "atlas.nii.gz"), opj(TEMP, "surrogate_")
-    )
+    ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"))
 
     # Perform event detection on AUC
     DATA_file = opj(DIR, "sub-002ParkMabCm_AUC_200.nii.gz")
@@ -215,9 +210,7 @@ def main():
         etspeaks_AUC,
         mu_AUC,
         ets_AUC_denoised,
-    ) = ev.event_detection(
-        DATA_file, opj(TEMP, "atlas.nii.gz"), opj(TEMP, "surrogate_AUC_")
-    )
+    ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_AUC_"))
 
     # Plot comparison of rss time series, null, and significant peaks for
     # original, betas, fitted, AUC and ATS
