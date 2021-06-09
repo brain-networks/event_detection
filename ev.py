@@ -1,11 +1,7 @@
-from os.path import join as opj
 
-import matplotlib.pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
-from matplotlib import cm
 from nilearn.input_data import NiftiLabelsMasker
-from scipy.io import loadmat
 from scipy.stats import zscore
 
 
@@ -13,8 +9,8 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     [t, n] = z_ts.shape
     if surrprefix != "":
         zr = zscore(
-            masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz"), ddof=1
-        )
+            masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz"),
+            ddof=1)
     else:
         # perform numrand randomizations
         zr = np.copy(z_ts)
@@ -29,7 +25,8 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     return rssr
 
 
-def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True):
+def event_detection(DATA_file, atlas, surrprefix="", sursufix="",
+                    segments=True):
     masker = NiftiLabelsMasker(
         labels_img=atlas,
         standardize=True,
@@ -78,7 +75,8 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
 
     p = np.zeros([t, 1])
     for i in range(t):
-        p[i] = np.mean(np.reshape(rssr, rssr.shape[0] * rssr.shape[1]) >= rss[i])
+        p[i] = np.mean(np.reshape(rssr,
+                       rssr.shape[0] * rssr.shape[1]) >= rss[i])
     # apply statistical cutoff
     pcrit = 0.001
 
