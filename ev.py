@@ -144,6 +144,6 @@ def surrogates_to_array(surrprefix, sursufix, masker, numrand=100):
         if rand_i == 0:
             ets = np.zeros((numrand, len(ets_temp.flatten())))
 
-        ets[rand_i, :] = ets.flatten()
+        ets[rand_i, :] = ets_temp.flatten()
 
     return ets
