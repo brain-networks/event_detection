@@ -1,7 +1,14 @@
+"""Functions to perform event detection."""
+import subprocess
+from os.path import basename, join
+
 import numpy as np
 from joblib import Parallel, delayed
 from nilearn.input_data import NiftiLabelsMasker
 from scipy.stats import zscore
+
+from Debiasing.debiasing_functions import debiasing_block, debiasing_spike
+from Debiasing.hrf_matrix import HRFMatrix
 
 
 def calculate_ets(y, n):
@@ -18,6 +25,9 @@ def calculate_ets(y, n):
 
 
 def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
+    """
+    Calculate RSS on surrogate data.
+    """
     [t, n] = z_ts.shape
 
     if surrprefix != "":
@@ -39,6 +49,9 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
 
 
 def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True):
+    """
+    Perform event detection on given data.
+    """
     masker = NiftiLabelsMasker(
         labels_img=atlas,
         standardize=False,
@@ -111,7 +124,7 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
     else:
         ets_thr = None
 
-    return ets, rss, rssr, idxpeak, etspeaks, mu, ets_thr
+    return ets, rss, rssr, idxpeak, etspeaks, mu, ets_thr, u, v
 
 
 def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile):
@@ -152,8 +165,59 @@ def surrogates_to_array(surrprefix, sursufix, masker, numrand=100):
     return ets
 
 
-def debiasing(mtx):
+def debiasing(data_file, mask, mtx, idx_u, idx_v, tr, out_dir, history_str):
     """
     Perform debiasing based on denoised edge-time matrix.
     """
     print("Performing debiasing based on denoised edge-time matrix...")
+    masker = NiftiLabelsMasker(
+        labels_img=mask,
+        standardize=False,
+        memory="nilearn_cache",
+        strategy="mean",
+    )
+
+    # Read data
+    data = masker.fit_transform(data_file)
+
+    # Generate mask of significant edge-time connections
+    ets_mask = np.zeros(data.shape)
+    idxs = np.where(mtx != 0)
+    time_idxs = idxs[0]
+    edge_idxs = idxs[1]
+
+    print("Generating mask of significant edge-time connections...")
+    for idx, time_idx in enumerate(time_idxs):
+        ets_mask[time_idx, idx_u[edge_idxs[idx]]] = 1
+        ets_mask[time_idx, idx_v[edge_idxs[idx]]] = 1
+
+    # Create HRF matrix
+    hrf = HRFMatrix(
+        TR=tr,
+        TE=[0],
+        nscans=data.shape[0],
+        r2only=True,
+        has_integrator=False,
+        is_afni=True,
+    )
+    hrf.generate_hrf()
+
+    # Perform debiasing
+    deb_output = debiasing_spike(hrf, data, ets_mask)
+    beta = deb_output["beta"]
+    fitt = deb_output["betafitts"]
+
+    # Transform results back to 4D
+    beta_4D = masker.inverse_transform(beta)
+    beta_file = join(out_dir, f"{basename(data_file[:-7])}_beta_ETS.nii.gz")
+    beta_4D.to_filename(beta_file)
+    subprocess.run(f"3dNotes {join(out_dir, beta_file)} -h {history_str}", shell=True)
+
+    fitt_4D = masker.inverse_transform(fitt)
+    fitt_file = join(out_dir, f"{basename(data_file[:-7])}_fitt_ETS.nii.gz")
+    fitt_4D.to_filename(fitt_file)
+    subprocess.run(f"3dNotes {join(out_dir, fitt_file)} -h {history_str}", shell=True)
+
+    print("Debiasing finished and files saved.")
+
+    return beta, fitt

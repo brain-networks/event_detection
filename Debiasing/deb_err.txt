@@ -1,0 +1,379 @@
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.EST.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.EST.betafitts_99.GROUP.nii.gz
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.betafitts_99.GROUP.nii.gz
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+usage: debiasing.py [-h] -i DATASETS [DATASETS ...] -m MASK -auc AUC [-te TE]
+                    [-d DIR] [-auc_dwm AUC_DWM] [-mask_dwm MASK_DWM]
+                    [-key KEY] [-afni] [-hrfmodel HRFMODEL] [-hrfpath HRFPATH]
+                    [-thr THR] [-max] [-dist DIST] [-ls] [-stc]
+                    [-cluster_size CLUSTER_SIZE] [-block] [-fusion]
+                    [-fusion_nlambdas NLAMBDAS] [-fusion_lambda FUSION_LAMBDA]
+                    [-fusion_gamma FUSION_GAMMA] [-groups]
+                    [-group_dist GROUP_DIST]
+debiasing.py: error: ambiguous option: -group could match -groups, -group_dist
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.DR2.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.DR2.nii.gz’: No such file or directory
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.dr2HRF.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.dr2HRF.nii.gz’: No such file or directory
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+usage: debiasing.py [-h] -i DATASETS [DATASETS ...] -m MASK -auc AUC [-te TE]
+                    [-d DIR] [-auc_dwm AUC_DWM] [-mask_dwm MASK_DWM]
+                    [-key KEY] [-afni] [-hrfmodel HRFMODEL] [-hrfpath HRFPATH]
+                    [-thr THR] [-max] [-dist DIST] [-ls] [-stc]
+                    [-cluster_size CLUSTER_SIZE] [-block] [-fusion]
+                    [-fusion_nlambdas NLAMBDAS] [-fusion_lambda FUSION_LAMBDA]
+                    [-fusion_gamma FUSION_GAMMA] [-groups]
+                    [-group_dist GROUP_DIST]
+debiasing.py: error: ambiguous option: -group could match -groups, -group_dist
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.DR2.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.DR2.nii.gz’: No such file or directory
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.dr2HRF.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.dr2HRF.nii.gz’: No such file or directory
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m** ERROR:[0m '[GAM]' is unknown response function type
+[7m** FATAL ERROR:[0m '-stim_times 1': don't understand basis function model '[GAM]' [nopt=12]
+** Program compile date = Feb 26 2020
+[7m** ERROR:[0m mri_read_1D: can't read 1D data from stdin
+** Can't read time series file stdin:
+Traceback (most recent call last):
+  File "debiasing.py", line 475, in <module>
+    _main()
+  File "debiasing.py", line 471, in _main
+    debiasing(**kwargs)
+  File "debiasing.py", line 293, in debiasing
+    hrf.generate_hrf()
+  File "/bcbl/home/public/MEPFM/pySPFM_public/Debiasing/hrf_matrix.py", line 117, in generate_hrf
+    hrf_SPM = hrf_afni(self.TR, self.lop_hrf)
+  File "/bcbl/home/public/MEPFM/pySPFM_public/Debiasing/hrf_matrix.py", line 70, in hrf_afni
+    hrf_command, shell=True, universal_newlines=True
+  File "/opt/anaconda3/lib/python3.7/subprocess.py", line 376, in check_output
+    **kwargs).stdout
+  File "/opt/anaconda3/lib/python3.7/subprocess.py", line 468, in run
+    output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '3dDeconvolve -x1D_stop -nodata 16 0.300000 -polort -1 -num_stimts 1 -stim_times 1 '1D:0' '['GAM']' -quiet -x1D stdout: | 1deval -a stdin: -expr 'a'' returned non-zero exit status 1.
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.DR2.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.DR2.nii.gz’: No such file or directory
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset S51vol.pySPFM.LARS.dr2HRF.nii.gz
+** Program compile date = Feb 26 2020
+rm: cannot remove ‘S51vol.pySPFM.LARS.dr2HRF.nii.gz’: No such file or directory
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=16 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 16 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=32 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 32 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=64 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 64 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.GAM.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.GAM.betafitts_99.GROUP.nii.gz
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=16 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 16 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=32 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 32 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=64 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 64 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=128 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 128 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.EST.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.EST.betafitts_99.GROUP.nii.gz
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.betafitts_99.GROUP.nii.gz
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=16 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 16 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=32 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 32 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=64 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 64 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=128 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 128 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+/bcbl/home/public/MEPFM/pySPFM_public/Debiasing/hrf_matrix.py:172: RuntimeWarning: invalid value encountered in power
+  Wfusion = np.power(-np.sign(hrf_cov), weights)
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=16 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 16 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=32 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 32 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=64 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 64 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+/bcbl/home/public/MEPFM/pySPFM_public/Debiasing/hrf_matrix.py:172: RuntimeWarning: invalid value encountered in power
+  Wfusion = np.power(-np.sign(hrf_cov), weights)
+                                                                                                                                                                                                                                                             ++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.GAM.beta_99.GROUP.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.GAM.betafitts_99.GROUP.nii.gz
+ln: failed to create symbolic link ‘/export/home/eurunuela/lab/data’: File exists
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=16 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 16 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (16x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=32 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 32 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (32x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=64 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 64 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (64x1):  1  ++ VERY GOOD ++
+[7m*+ WARNING:[0m no -stim_label given for stim #1 ==> label = 'Stim#1'
+++ using TR=0.3 seconds for -stim_times and -nodata
+++ using NT=128 time points for -nodata
+++ -stim_times using TR=0.3 s for stimulus timing conversion
+++ -stim_times using TR=0.3 s for any -iresp output datasets
+++  [you can alter the -iresp TR via the -TR_times option]
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+[7m*+ WARNING:[0m -stim_times 1 has all times equal to 0 or 1 ?!?!
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 128 (no censoring)
+ + Number of parameters:  1 [0 baseline ; 1 signal]
+++ ----- Signal+Baseline matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (128x1):  1  ++ VERY GOOD ++
+/bcbl/home/public/MEPFM/pySPFM_public/Debiasing/hrf_matrix.py:172: RuntimeWarning: invalid value encountered in power
+  Wfusion = np.power(-np.sign(hrf_cov), weights)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                               ++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcopy: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.beta_99.FUSION.nii.gz
+++ 3dcalc: AFNI version=AFNI_20.0.18 (Feb 26 2020) [64-bit]
+++ Authored by: A cast of thousands
+++ Output dataset ./S51vol.pySPFM.LARS.betafitts_99.FUSION.nii.gz

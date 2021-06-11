@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Cleveland Clinic - BCBL Epilepsy7T project</title>
+        <style>
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="cleveland-clinic---bcbl-epilepsy7t-project">Cleveland Clinic - BCBL Epilepsy7T project</h1>
+<ul>
+<li><a href="#cleveland-clinic---bcbl-epilepsy7t-project">Cleveland Clinic - BCBL Epilepsy7T project</a>
+<ul>
+<li><a href="#description-of-files-for-each-run">Description of files (for each run)</a></li>
+<li><a href="#scripts-and-how-to-use-them">Scripts and how to use them</a>
+<ul>
+<li><a href="#histpy"><em>hist.py</em></a></li>
+<li><a href="#stc_and_debiassh"><em>stc_and_debias.sh</em></a></li>
+<li><a href="#dependencies">Dependencies</a>
+<ul>
+<li><a href="#stcpy"><em>stc.py</em></a></li>
+<li><a href="#debiasingpy"><em>debiasing.py</em></a></li>
+<li><a href="#hrf_matrixpy"><em>hrf_matrix.py</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="description-of-files-for-each-run">Description of files (for each run)</h2>
+<p>Volumes that are common to both methods:</p>
+<ul>
+<li>
+<p><strong><p style="color: #F39C12">S41vol.mask.nii.gz</p></strong> Whole brain binary mask of functional data. It is used to reduce the dimensionality of calculations.</p>
+</li>
+<li>
+<p><strong><p style="color: #F39C12">S41vol.mask.DWM.nii.gz</p></strong> Binary mask of the deep white matter in the functional space. White matter tissue segmentation is computed with 3dSeg, binarized (probability &gt; 0.6 of the Segsy/Classes+orig) and eroded by 3 voxels. This mask is used to calculate the threshold value that is applied on the AUC dataset.</p>
+</li>
+<li>
+<p><strong><p style="color: #F39C12">S41vol.orig.smooth.det.spc.nii.gz</p></strong> Functional data after smoothing (smooth), detrending (det) and converting into signal percentage change (spc). This is the input to the PFM algorithms. It is automatically used by the debiasing script if the filename is not modified.</p>
+<p><strong>In study478, the analysis were done in <span style="color: #F39C12">S41vol.denoised.smooth.det.spc.nii.gz</span> volume, where the original dataset was denoised by regressing out the time series of 1 independent component (FLS MELODIC also included in the folder) that was clearly identified as an artefact (see bad_components.txt).</strong></p>
+</li>
+</ul>
+<p>Volumes specific to 3dPFM (can be checked with 3dPFM -help):</p>
+<pre><code class="language-bash"><div>3dPFM -input S41vol.orig.smooth.det.spc.nii.gz -mask S41vol.mask.nii.gz -criteria bic -algorithm lasso -hrf SPMG1 -maxiterfactor 0.3 -<span class="hljs-built_in">jobs</span> 10 -outZAll lasso_BIC_SPMG1
+</div></code></pre>
+<ul>
+<li><strong><p style="color: #F39C12">S41vol.lasso.BIC.SPMG1.beta.nii.gz</p></strong> Debiased estimates of the neuronal-related time series (i.e. events). Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.lasso.BIC.SPMG1.betafitts.nii.gz</p></strong> Convolved debiased estimates neuronal-related time series (i.e. events convolved with HRF model). Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.lasso.BIC.SPMG1.lambda.nii.gz</p></strong> Map of the regularization parameter used in the deconvolution of each voxel. Selected according to Bayesian Information Criterion.</li>
+<li><strong><p style="color: #F39C12">S41vol.lasso.BIC.SPMG1.Z_Tstats_beta.nii.gz</p></strong> Dataset with z-scores of the T-statistics of beta. Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.lasso.BIC.SPMG1.Z_Fstats_beta.nii.gz</p></strong> Map of Dataset of z-scores of the F-statistics of the deconvolved component. Same length as input data.</li>
+</ul>
+<p>New PFM approach with Stability Selection:</p>
+<ul>
+<li><strong><p style="color: #F39C12">S41vol.pySPFM.LARS.AUC.nii.gz</p></strong> Dataset containing the area under the curve (AUC) of the stability path. It is a 4D dataset explaining the probability of a neuronal-related event happening in each voxel and timepoint. It is used to obtain the debiased estimates of <em>beta</em> and <em>betafitts</em> once it is thresholded and spatio-temporal clustering (optional) is performed on it. Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.pySPFM.LARS.beta_99.nii.gz</p></strong> Debiased estimates of <em>beta</em> after thresholding the AUC dataset with the 99th percentile. No spatio-temporal clustering was performed to get this results. Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.pySPFM.LARS.betafitts_99.nii.gz</p></strong> Debiased estimates of <em>betafitts</em> after thresholding the AUC dataset with the 99th percentile. No spatio-temporal clustering was performed to get this results.</li>
+<li><strong><p style="color: #F39C12">S41vol.pySPFM.LARS.STC.beta_99.nii.gz</p></strong> Debiased estimates of <em>beta</em> after thresholding the AUC dataset with the 99th percentile and performing spatio-temporal clustering (STC). A minimum cluster size of 10 voxels was used. The sliding window's size depended on the acquisition TR. A sliding window of -2/+2 TRs was used when TR=0.5, while a sliding window of -3/+3 TRs was used when TR=0.3. Same length as input data.</li>
+<li><strong><p style="color: #F39C12">S41vol.pySPFM.LARS.STC.betafitts_99.nii.gz</p></strong> Debiased estimates of <em>betafitts</em> after thresholding the AUC dataset with the 99th percentile and performing spatio-temporal clustering (STC). A minimum cluster size of 10 voxels was used. The sliding window's size depended on the acquisition TR. A sliding window of -2/+2 TRs was used when TR=0.5, while a sliding window of -3/+3 TRs was used when TR=0.3.</li>
+<li><strong><p style="color: #F39C12">S41vol_thr.csv</p></strong> Comma separeted file with the calculated percentile values. The header shows the percentile value (e.g. 99) and the row below shows the AUC value corresponding to the percentile (e.g. 0.401).</li>
+</ul>
+<hr>
+<h2 id="scripts-and-how-to-use-them">Scripts and how to use them</h2>
+<p>This section aims to guide you through the two commands needed to obtain the estimated beta and betafits with the new PFM algorithm using Stability Selection (<a href="https://doi.org/10.1111/j.1467-9868.2010.00740.x">https://doi.org/10.1111/j.1467-9868.2010.00740.x</a>). The new PFM approach returns the AUC timeseries described in the section above. This AUC timeseries describes the probability of a neuronal-event ocurring for each voxel and moment in time. Thus, this is not the real estimate of the neuronal-events, which must be computed with a debiasing step. The following two scripts take care of that.</p>
+<blockquote>
+<p><em>CAUTION! The examples shown below always assume you run the scripts from within the directory containing the data.</em></p>
+</blockquote>
+<h3 id="histpy"><em><a href="http://hist.py">hist.py</a></em></h3>
+<p>First, given that the AUC is a timeseries with no zero values by definition with the current procedure that performs the deconvolution using Least Angle Regression (LARS), a threshold must be applied to select the true neuronal-related events (i.e. beta) and their corresponding generated HRF (i.e. betafitts). This first script aims to provide a way of selecting such threshold. The script calculates the provided percentiles of the AUC timeseries in a region of no interest (here, Deep White Matter voxels) and saves them to a CSV file called <em>thr.csv</em>. By default, the script calculates the 95th, 99th and 100th percentiles, but other percentiles can be calculated too. You can find the help of the script using the <code>-h</code> option.</p>
+<p>Using the script is very easy: just provide the AUC and the masks, and you're good to go! Two masks are needed though. First, a whole-brain mask, and second, a mask of the region of no interest from which the thresholds are calculted.</p>
+<pre><code class="language-python"><div>python /path/to/script/hist.py --input AUC --mask REGION_OF_NO_INTEREST_MASK
+</div></code></pre>
+<p>For example, if we wanted to get the 95th, 99th and 100th percentiles (default) from run S41vol with the deep white matter (DWM) as our region of no interest, we would do:</p>
+<pre><code class="language-python"><div>python /path/to/script/hist.py --input S41vol.pySPFM.LARS.AUC.nii.gz --mask S41vol.mask.DWM.nii.gz
+</div></code></pre>
+<p>The example would generate a file named <em>thr.csv</em>. We could rename it to avoid overwriting the file; e.g. with the following command:</p>
+<pre><code class="language-bash"><div>mv thr.csv S41vol_thr.csv
+</div></code></pre>
+<p>As mentioned, percentiles different from the default ones can also be provided. To do so, we would only need to add the <code>--percentile</code> option and the values as shown below:</p>
+<pre><code class="language-python"><div>python /path/to/script/hist.py --input S41vol.pySPFM.LARS.AUC.nii.gz --mask S41vol.mask.DWM.nii.gz --percentile <span class="hljs-number">96</span> <span class="hljs-number">97</span> <span class="hljs-number">98</span>
+</div></code></pre>
+<p>This last example would generate a file named <em>thr.csv</em> with the 96th, 97th and 98th percentiles.</p>
+<h3 id="stc_and_debiassh"><em>stc_and_debias.sh</em></h3>
+<blockquote>
+<p><em>CAUTION! Internally, this script calls <em><a href="http://stc.py">stc.py</a></em> and <em><a href="http://debiasing.py">debiasing.py</a></em>. Make sure that the path to these dependencies is correct in <em>stc_and_debias.sh</em>.</em></p>
+</blockquote>
+<p>Once we have decided a threshold, it's time to apply it on our AUC timeseries to obtain the beta and betafitts volumes. This script takes care of not only the debiasing step, but also performs the thresholding and spatio-temporal clustering. Internally, it is a bit more complicated than the previous one, but its usage is very simple. It relies on the correct naming of the files to work properly with no interaction from our part. The filenames could be edited in the script, but we suggest sticking to the &quot;filename system&quot; we provided to avoid any issues with the script. This will be clearer once we see the example below.</p>
+<p>In order to obtain the beta and betafitts datasets from the AUC timeseries, this script performs the following three steps:</p>
+<ol>
+<li>Thresholding the AUC timeseries (in the <a href="http://stc.py">stc.py</a> dependency).</li>
+<li>Spatio-temporal clustering of the thresholded AUC timeseries (in the <a href="http://stc.py">stc.py</a> dependency).</li>
+<li>Debiasing step based on the non-zero coefficients of the thresholded and clustered AUC timeseries (in the <a href="http://debiasing.py">debiasing.py</a> dependency).</li>
+</ol>
+<blockquote>
+<p><em>The dependencies are briefly described at the end of this document.</em></p>
+</blockquote>
+<p>Let us see what arguments are needed to run this script, which are input via the terminal or could also be manually added to the script. Given that thresholds are saved in <em>thr.csv</em> we encourage you to pass the arguments through the terminal to avoid any errors when saving modifications to the script.</p>
+<p>The script must be run as follows:</p>
+<pre><code class="language-bash"><div>sh /path/to/script/stc_and_debias.sh PROJECT_DIRECTORY RUN LABEL THRESHOLD WINDOW_SIZE CLUSTER_SIZE
+</div></code></pre>
+<p>where the arguments are:</p>
+<ul>
+<li>PROJECT_DIRECTORY: Folder where the AUC timeseries, the SPC data and the masks are saved. If you're already in this directory, you should pass the following argument: <code>$(pwd)</code>.</li>
+<li>RUN: This argument refers to the dataset run; i.e. the beginning of the file, e.g. <code>S41vol</code>.</li>
+<li>LABEL: The label refers to the ending used in naming the new files that are generated by the script. It is useful to differentiate among the different thresholds used for example. We use the percentile value in our results, e.g. <code>99</code>.</li>
+<li>THRESHOLD: The value used to threshold the AUC timeseries, e.g. <code>0.401</code>.</li>
+<li>WINDOW_SIZE: The size of the (temporal) sliding window used in the spatio-temporal clustering method. The window will always be symmetrical; i.e. if a value of <code>2</code> is given, the window size will go from -2 to +2 TRs.</li>
+<li>CLUSTER_SIZE: The minimum number of voxels to form a clusters, otherwise the events are nulled; e.g. <code>10</code>.</li>
+</ul>
+<p>For example, the command could be as follows:</p>
+<pre><code class="language-bash"><div>sh /path/to/script/stc_and_debias.sh $(<span class="hljs-built_in">pwd</span>) S41vol 99 0.401 2 10
+</div></code></pre>
+<blockquote>
+<p><em>Please, consider that the lower the threshold, the more non-zero coefficients will be used and the longer the computation time will be.</em></p>
+</blockquote>
+<p>The script will generate the following files:</p>
+<p><strong><p style="color: #F39C12"> S41vol.pySPFM.LARS.AUC.THR.STC_99.nii.gz</p></strong>
+<strong><p style="color: #F39C12"> S41vol.pySPFM.LARS.STC.beta_99.nii.gz</p></strong>
+<strong><p style="color: #F39C12"> S41vol.pySPFM.LARS.STC.betafitts_99.nii.gz</p></strong></p>
+<p><strong>CONGRATULATIONS!</strong> You have computed the debiased results of the stability-based (new) PFM algorithm!</p>
+<p>A final note: the thresholding value can be freely selected without the use of <em><a href="http://hist.py">hist.py</a></em>, the purpose of which is to facilitate and make the selection of the threshold data-driven. Every dataset will have a different optimal threshold, so feel free to not use <em><a href="http://hist.py">hist.py</a></em> and directly provide <em>stc_and_debias.sh</em> a threshold of your choice.</p>
+<h3 id="dependencies">Dependencies</h3>
+<blockquote>
+<p><em>The dependencies should not be edited for the correct functioning of the previous scripts.</em></p>
+</blockquote>
+<h4 id="stcpy"><em><a href="http://stc.py">stc.py</a></em></h4>
+<p>This Python script creates a bash script with three AFNI commands that perform the spatio-temporal clustering.</p>
+<h4 id="debiasingpy"><em><a href="http://debiasing.py">debiasing.py</a></em></h4>
+<p>This Python script solves the least squares problem with the non-zero coefficients to provide a debiased estimation of the betas and betaffits.</p>
+<h4 id="hrf_matrixpy"><em>hrf_matrix.py</em></h4>
+<p>This Python class is a dependency for <em><a href="http://debiasing.py">debiasing.py</a></em>. It takes care of generating the design matrix with the haemodynamic response function that is necessary to find the debiased estimates via orthogonal least squares.</p>
+
+    </body>
+    </html>
