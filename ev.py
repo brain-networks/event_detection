@@ -1,4 +1,3 @@
-
 import numpy as np
 from joblib import Parallel, delayed
 from nilearn.input_data import NiftiLabelsMasker
@@ -20,10 +19,11 @@ def calculate_ets(y, n):
 
 def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     [t, n] = z_ts.shape
+
     if surrprefix != "":
-        zr = zscore(
-            masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz"),
-            ddof=1)
+        zr = masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz")
+        if "AUC" not in surrprefix:
+            zr = zscore(zr, ddof=1)
     else:
         # perform numrand randomizations
         zr = np.copy(z_ts)
@@ -38,18 +38,21 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     return rssr
 
 
-def event_detection(DATA_file, atlas, surrprefix="", sursufix="",
-                    segments=True):
+def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True):
     masker = NiftiLabelsMasker(
         labels_img=atlas,
-        standardize=True,
+        standardize=False,
         memory="nilearn_cache",
         strategy="mean",
     )
 
     data = masker.fit_transform(DATA_file)
     # load and zscore time series
-    z_ts = zscore(data, ddof=1)
+    # AUC does not get z-scored
+    if "AUC" in surrprefix:
+        z_ts = data
+    else:
+        z_ts = zscore(data, ddof=1)
     # Get number of time points/nodes
     [t, n] = z_ts.shape
 
@@ -71,8 +74,7 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="",
 
     p = np.zeros([t, 1])
     for i in range(t):
-        p[i] = np.mean(np.reshape(rssr,
-                       rssr.shape[0] * rssr.shape[1]) >= rss[i])
+        p[i] = np.mean(np.reshape(rssr, rssr.shape[0] * rssr.shape[1]) >= rss[i])
     # apply statistical cutoff
     pcrit = 0.001
 
@@ -103,8 +105,9 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="",
     mu = np.nanmean(etspeaks, 0)
 
     if "AUC" in surrprefix:
+        print("Reading AUC of surrogates to perform the thresholding step...")
         ets_surr = surrogates_to_array(surrprefix, sursufix, masker, numrand)
-        ets_thr = threshold_ets_matrix(ets, ets_surr, idxpeak, percentile=95)
+        ets_thr = threshold_ets_matrix(ets, ets_surr, idxpeak, percentile=99)
     else:
         ets_thr = None
 
@@ -121,7 +124,7 @@ def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile)
     thresholded_matrix = np.zeros(ets_matrix.shape)
 
     # Get selected columns from ETS matrix
-    thresholded_matrix[:, selected_idxs] = ets_matrix[:, selected_idxs]
+    thresholded_matrix[selected_idxs, :] = ets_matrix[selected_idxs, :]
 
     # Calculate the percentile threshold from surrogate matrix
     thr = np.percentile(surr_ets_matrix, percentile)
@@ -147,3 +150,10 @@ def surrogates_to_array(surrprefix, sursufix, masker, numrand=100):
         ets[rand_i, :] = ets_temp.flatten()
 
     return ets
+
+
+def debiasing(mtx):
+    """
+    Perform debiasing based on denoised edge-time matrix.
+    """
+    print("Performing debiasing based on denoised edge-time matrix...")

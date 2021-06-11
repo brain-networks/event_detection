@@ -13,7 +13,7 @@ DIR = "/bcbl/home/public/PARK_VFERRER/PFM_data"
 TEMP = "/bcbl/home/public/PARK_VFERRER/PFM_data/temp_" + subject + "_" + nROI
 ats = np.loadtxt(opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor_ATS_abs.1D"))
 ATLAS_file = opj(TEMP, "atlas.nii.gz")
-FIGSIZE = (25, 20)
+FIGSIZE = (25, 30)
 
 
 def plot_comparison(
@@ -149,22 +149,22 @@ def plot_all(
     plt.savefig(opj(DIR, "event_detection_all.png"), dpi=300)
 
 
-def plot_ets_matrix(ets, dir, sufix=""):
+def plot_ets_matrix(ets, outdir, sufix="", vmin=-0.5, vmax=0.5):
     """
     Plots edge-time matrix
     """
-    plot_range = np.max(np.abs(np.array([np.min(ets), np.max(ets)])))
     plt.figure(figsize=FIGSIZE)
-    plt.imshow(ets, vmin=-plot_range, vmax=plot_range, cmap="bwr_r")
+    plt.imshow(ets.T, vmin=vmin, vmax=vmax, cmap="bwr", aspect="auto")
     plt.title("Edge-time series")
     plt.xlabel("Time (TR)")
     plt.ylabel("Edge-edge connections")
     plt.colorbar()
-    plt.savefig(opj(dir, f"ets{sufix}.png"), dpi=300)
+    plt.savefig(opj(outdir, f"ets{sufix}.png"), dpi=300)
 
 
 def main():
     # Perform event detection on BETAS
+    print("Performing event-detection on betas...")
     DATA_file = opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor_beta.nii.gz")
     (
         ets_beta,
@@ -177,6 +177,7 @@ def main():
     ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"), "_beta")
 
     # Perform event detection on ORIGINAL data
+    print("Performing event-detection on original data...")
     DATA_file = opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
     (
         ets_orig_sur,
@@ -189,6 +190,7 @@ def main():
     ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"))
 
     # Perform event detection on FITTED signal
+    print("Performing event-detection on fitted signal...")
     DATA_file = opj(DIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt.nii.gz")
     (
         ets_fitt,
@@ -201,6 +203,7 @@ def main():
     ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_"))
 
     # Perform event detection on AUC
+    print("Performing event-detection on AUC...")
     DATA_file = opj(DIR, "sub-002ParkMabCm_AUC_200.nii.gz")
     (
         ets_AUC,
@@ -212,6 +215,7 @@ def main():
         ets_AUC_denoised,
     ) = ev.event_detection(DATA_file, ATLAS_file, opj(TEMP, "surrogate_AUC_"))
 
+    print("Making plots...")
     # Plot comparison of rss time series, null, and significant peaks for
     # original, betas, fitted, AUC and ATS
     plot_comparison(
@@ -241,6 +245,9 @@ def main():
 
     # Save denoised ETS to npy for later use
     np.save(opj(DIR, "ets_AUC_denoised.npy"), ets_AUC_denoised)
+
+    print("Denoised edge-time matrix computed and saved.")
+    print("THE END")
 
 
 if __name__ == "__main__":
