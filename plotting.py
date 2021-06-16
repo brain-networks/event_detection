@@ -22,6 +22,10 @@ MAINDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data"
 TEMPDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data/temp_" + SUBJECT + "_" + NROIS
 ATS = np.loadtxt(opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_ATS_abs_95.1D"))
 ATLAS = opj(TEMPDIR, "atlas.nii.gz")
+DATAFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
+BETAFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_beta.nii.gz")
+FITTFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt.nii.gz")
+AUCFILE = opj(MAINDIR, "sub-002ParkMabCm_AUC_200.nii.gz")
 
 # Font size for plots
 font = {"weight": "normal", "size": 22}
@@ -187,7 +191,6 @@ def main():
     """
     # Perform event detection on BETAS
     print("Performing event-detection on betas...")
-    data_file = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_beta.nii.gz")
     (
         ets_beta,
         rss_beta,
@@ -198,11 +201,10 @@ def main():
         _,
         _,
         _,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_beta_95")
+    ) = ev.event_detection(BETAFILE, ATLAS, opj(TEMPDIR, "surrogate_"), "_beta_95")
 
     # Perform event detection on ORIGINAL data
     print("Performing event-detection on original data...")
-    data_file = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
     (
         ets_orig_sur,
         rss_orig_sur,
@@ -213,11 +215,10 @@ def main():
         _,
         _,
         _,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"))
+    ) = ev.event_detection(DATAFILE, ATLAS, opj(TEMPDIR, "surrogate_"))
 
     # Perform event detection on FITTED signal
     print("Performing event-detection on fitted signal...")
-    data_file = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt.nii.gz")
     (
         ets_fitt,
         rss_fitt,
@@ -228,11 +229,10 @@ def main():
         _,
         _,
         _,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_fitt_95")
+    ) = ev.event_detection(FITTFILE, ATLAS, opj(TEMPDIR, "surrogate_"), "_fitt_95")
 
     # Perform event detection on AUC
     print("Performing event-detection on AUC...")
-    data_file = opj(MAINDIR, "sub-002ParkMabCm_AUC_200.nii.gz")
     (
         ets_auc,
         rss_auc,
@@ -243,7 +243,7 @@ def main():
         ets_auc_denoised,
         idx_u,
         idx_v,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_AUC_"))
+    ) = ev.event_detection(AUCFILE, ATLAS, opj(TEMPDIR, "surrogate_AUC_"))
 
     print("Making plots...")
     # Plot comparison of rss time series, null, and significant peaks for
@@ -278,9 +278,8 @@ def main():
     plot_ets_matrix(ets_auc_denoised, MAINDIR, "_AUC_denoised")
 
     # Perform debiasing based on thresholded edge-time matrix
-    data_file = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
     beta, _ = ev.debiasing(
-        data_file, ATLAS, ets_auc_denoised, idx_u, idx_v, TR, MAINDIR, HISTORY
+        DATAFILE, ATLAS, ets_auc_denoised, idx_u, idx_v, TR, MAINDIR, HISTORY
     )
 
     print("Plotting edge-time matrix of ETS-based deconvolution.")

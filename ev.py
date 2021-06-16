@@ -87,7 +87,10 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
         for irand in range(numrand)
     )
     rssr = np.array(results).T
-    rssr[0, :] = 0
+
+    # TODO: find out why there is such a big peak on time-point 0 for AUC surrogates
+    if "AUC" in surrprefix:
+        rssr[0, :] = 0
 
     p = np.zeros([t, 1])
     rssr_flat = rssr.flatten()
@@ -95,9 +98,6 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
         p[i] = np.mean(rssr_flat >= rss[i])
     # apply statistical cutoff
     pcrit = 0.001
-
-    if "AUC" in surrprefix:
-        breakpoint()
 
     # find frames that pass statistical testz_ts
     idx = np.argwhere(p < pcrit)[:, 0]
