@@ -33,7 +33,8 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     if surrprefix != "":
         zr = masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz")
         if "AUC" not in surrprefix:
-            zr = zscore(zr, ddof=1)
+            zr = np.nan_to_num(zscore(zr, ddof=1))
+        zr = np.nan_to_num(zr)
     else:
         # perform numrand randomizations
         zr = np.copy(z_ts)
@@ -45,6 +46,7 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
 
     # calcuate rss
     rssr = np.sqrt(np.sum(np.square(etsr), axis=1))
+
     return rssr
 
 
@@ -79,17 +81,23 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
     numrand = 100
     # initialize array for null rss
     rssr = np.zeros([t, numrand])
+
     results = Parallel(n_jobs=-1, backend="multiprocessing")(
         delayed(rss_surr)(z_ts, u, v, surrprefix, sursufix, masker, irand)
         for irand in range(numrand)
     )
     rssr = np.array(results).T
+    rssr[0, :] = 0
 
     p = np.zeros([t, 1])
+    rssr_flat = rssr.flatten()
     for i in range(t):
-        p[i] = np.mean(np.reshape(rssr, rssr.shape[0] * rssr.shape[1]) >= rss[i])
+        p[i] = np.mean(rssr_flat >= rss[i])
     # apply statistical cutoff
     pcrit = 0.001
+
+    if "AUC" in surrprefix:
+        breakpoint()
 
     # find frames that pass statistical testz_ts
     idx = np.argwhere(p < pcrit)[:, 0]

@@ -9,18 +9,22 @@ from matplotlib import cm
 
 import ev
 
+# Global variables
 SUBJECT = "sub-002ParkMabCm"
 NROIS = "200"
 NRAND = 100
 TR = 0.83
+FIGSIZE = (45, 30)
+HISTORY = "Deconvolution based on event-detection."
+
+# Paths to files
 MAINDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data"
 TEMPDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data/temp_" + SUBJECT + "_" + NROIS
 ATS = np.loadtxt(opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_ATS_abs_95.1D"))
 ATLAS = opj(TEMPDIR, "atlas.nii.gz")
-FIGSIZE = (45, 30)
-HISTORY = "Deconvolution based on event-detection."
 
-font = {"family": "normal", "weight": "normal", "size": 22}
+# Font size for plots
+font = {"weight": "normal", "size": 22}
 matplotlib.rc("font", **font)
 
 
@@ -194,7 +198,7 @@ def main():
         _,
         _,
         _,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_beta")
+    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_beta_95")
 
     # Perform event detection on ORIGINAL data
     print("Performing event-detection on original data...")
@@ -224,7 +228,7 @@ def main():
         _,
         _,
         _,
-    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_fitt")
+    ) = ev.event_detection(data_file, ATLAS, opj(TEMPDIR, "surrogate_"), "_fitt_95")
 
     # Perform event detection on AUC
     print("Performing event-detection on AUC...")
