@@ -11,21 +11,21 @@ import ev
 
 # Global variables
 SUBJECT = "sub-002ParkMabCm"
-NROIS = "200"
+NROIS = "500"
 NRAND = 100
 TR = 0.83
 FIGSIZE = (45, 30)
 HISTORY = "Deconvolution based on event-detection."
 
 # Paths to files
-MAINDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data"
+MAINDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data/" + SUBJECT + "_" + NROIS
 TEMPDIR = "/bcbl/home/public/PARK_VFERRER/PFM_data/temp_" + SUBJECT + "_" + NROIS
 ATS = np.loadtxt(opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_ATS_abs_95.1D"))
 ATLAS = opj(TEMPDIR, "atlas.nii.gz")
 DATAFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor.nii.gz")
-BETAFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_beta.nii.gz")
-FITTFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt.nii.gz")
-AUCFILE = opj(MAINDIR, "sub-002ParkMabCm_AUC_200.nii.gz")
+BETAFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_beta_95.nii.gz")
+FITTFILE = opj(MAINDIR, "pb06.sub-002ParkMabCm.denoised_no_censor_fitt_95.nii.gz")
+AUCFILE = opj(MAINDIR, f"sub-002ParkMabCm_AUC_{NROIS}.nii.gz")
 
 # Font size for plots
 font = {"weight": "normal", "size": 22}
