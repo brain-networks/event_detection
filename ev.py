@@ -49,7 +49,7 @@ def rss_surr(z_ts, u, v, surrprefix, sursufix, masker, irand):
     # calcuate rss
     rssr = np.sqrt(np.sum(np.square(etsr), axis=1))
 
-    return rssr
+    return (rssr, np.min(etsr), np.max(etsr))
 
 
 def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True):
@@ -69,7 +69,7 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
     if "AUC" in surrprefix:
         z_ts = data
     else:
-        z_ts = zscore(data, ddof=1)
+        z_ts = np.nan_to_num(zscore(data, ddof=1))
     # Get number of time points/nodes
     [t, n] = z_ts.shape
 
@@ -88,11 +88,20 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
         delayed(rss_surr)(z_ts, u, v, surrprefix, sursufix, masker, irand)
         for irand in range(numrand)
     )
-    rssr = np.array(results).T
+
+    for irand in range(numrand):
+        rssr[:, irand] = results[irand][0]
 
     # TODO: find out why there is such a big peak on time-point 0 for AUC surrogates
     if "AUC" in surrprefix:
         rssr[0, :] = 0
+        hist_ranges = np.zeros((2, numrand))
+        for irand in range(numrand):
+            hist_ranges[0, irand] = results[irand][1]
+            hist_ranges[1, irand] = results[irand][2]
+
+        hist_min = np.min(hist_ranges, axis=1)[0]
+        hist_max = np.max(hist_ranges, axis=1)[1]
 
     p = np.zeros([t, 1])
     rssr_flat = rssr.flatten()
@@ -129,15 +138,21 @@ def event_detection(DATA_file, atlas, surrprefix="", sursufix="", segments=True)
 
     if "AUC" in surrprefix:
         print("Reading AUC of surrogates to perform the thresholding step...")
-        ets_surr = surrogates_to_array(surrprefix, sursufix, masker, numrand)
-        ets_thr = threshold_ets_matrix(ets, ets_surr, idxpeak, percentile=99)
+        ets_thr = surrogates_to_array(
+            surrprefix,
+            sursufix,
+            masker,
+            hist_range=(hist_min, hist_max),
+            numrand=numrand,
+        )
+        ets_thr = threshold_ets_matrix(ets, idxpeak, ets_thr)
     else:
         ets_thr = None
 
     return ets, rss, rssr, idxpeak, etspeaks, mu, ets_thr, u, v
 
 
-def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile):
+def threshold_ets_matrix(ets_matrix, selected_idxs, thr):
     """
     Threshold the edge time-series matrix based on the selected time-points and
     the surrogate matrices.
@@ -149,30 +164,32 @@ def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile)
     # Get selected columns from ETS matrix
     thresholded_matrix[selected_idxs, :] = ets_matrix[selected_idxs, :]
 
-    # Calculate the percentile threshold from surrogate matrix
-    thr = np.percentile(surr_ets_matrix, percentile)
-
     # Threshold ETS matrix based on surrogate percentile
     thresholded_matrix[thresholded_matrix < thr] = 0
 
     return thresholded_matrix
 
 
-def surrogates_to_array(surrprefix, sursufix, masker, numrand=100):
+def surrogates_to_array(surrprefix, sursufix, masker, hist_range, numrand=100):
     """
     Read AUCs of surrogates, calculate histogram and sum of all histograms to
     obtain a single histogram that summarizes the data.
     """
-    ets_hist = np.zeros((numrand, 100))
+    ets_hist = np.zeros((numrand, 200))
     for rand_i in range(numrand):
         auc = masker.fit_transform(f"{surrprefix}{rand_i}{sursufix}.nii.gz")
         [t, n] = auc.shape
-        ets_temp, _, _ = calculate_ets(auc, n)
+        ets_temp, _, _ = calculate_ets(np.nan_to_num(auc), n)
 
-        ets_hist[rand_i, :] = np.histogram(ets_temp.flatten(), bins=100)
+        ets_hist[rand_i, :], bin_edges = np.histogram(
+            ets_temp.flatten(), bins=200, range=hist_range
+        )
 
     ets_hist_sum = np.sum(ets_hist, axis=0)
-    return ets_hist_sum
+    cumsum = np.cumsum(ets_hist_sum)
+    thr = bin_edges[np.searchsorted(cumsum, np.percentile(cumsum, 95))]
+
+    return thr
 
 
 def debiasing(data_file, mask, mtx, idx_u, idx_v, tr, out_dir, history_str):
