@@ -160,19 +160,19 @@ def threshold_ets_matrix(ets_matrix, surr_ets_matrix, selected_idxs, percentile)
 
 def surrogates_to_array(surrprefix, sursufix, masker, numrand=100):
     """
-    Read AUCs of surrogates and concatenate into array.
+    Read AUCs of surrogates, calculate histogram and sum of all histograms to
+    obtain a single histogram that summarizes the data.
     """
+    ets_hist = np.zeros((numrand, 100))
     for rand_i in range(numrand):
         auc = masker.fit_transform(f"{surrprefix}{rand_i}{sursufix}.nii.gz")
         [t, n] = auc.shape
         ets_temp, _, _ = calculate_ets(auc, n)
 
-        if rand_i == 0:
-            ets = np.zeros((numrand, len(ets_temp.flatten())))
+        ets_hist[rand_i, :] = np.histogram(ets_temp.flatten(), bins=100)
 
-        ets[rand_i, :] = ets_temp.flatten()
-
-    return ets
+    ets_hist_sum = np.sum(ets_hist, axis=0)
+    return ets_hist_sum
 
 
 def debiasing(data_file, mask, mtx, idx_u, idx_v, tr, out_dir, history_str):
