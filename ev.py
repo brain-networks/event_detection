@@ -170,24 +170,41 @@ def threshold_ets_matrix(ets_matrix, selected_idxs, thr):
     return thresholded_matrix
 
 
-def surrogates_to_array(surrprefix, sursufix, masker, hist_range, numrand=100):
+def calculate_hist(surrprefix, sursufix, irand, masker, hist_range, nbins=500):
+    """
+    Calculate histogram.
+    """
+    auc = masker.fit_transform(f"{surrprefix}{irand}{sursufix}.nii.gz")
+    [t, n] = auc.shape
+    ets_temp, _, _ = calculate_ets(np.nan_to_num(auc), n)
+
+    ets_hist, bin_edges = np.histogram(ets_temp.flatten(), bins=nbins, range=hist_range)
+
+    return (ets_hist, bin_edges)
+
+
+def surrogates_to_array(
+    surrprefix, sursufix, masker, hist_range, numrand=100, nbins=500, percentile=95
+):
     """
     Read AUCs of surrogates, calculate histogram and sum of all histograms to
     obtain a single histogram that summarizes the data.
     """
-    ets_hist = np.zeros((numrand, 200))
-    for rand_i in range(numrand):
-        auc = masker.fit_transform(f"{surrprefix}{rand_i}{sursufix}.nii.gz")
-        [t, n] = auc.shape
-        ets_temp, _, _ = calculate_ets(np.nan_to_num(auc), n)
+    ets_hist = np.zeros((numrand, nbins))
 
-        ets_hist[rand_i, :], bin_edges = np.histogram(
-            ets_temp.flatten(), bins=200, range=hist_range
-        )
+    hist = Parallel(n_jobs=-1, backend="multiprocessing")(
+        delayed(calculate_hist)(surrprefix, sursufix, irand, masker, hist_range, nbins)
+        for irand in range(numrand)
+    )
+
+    for irand in range(numrand):
+        ets_hist[irand, :] = hist[irand][0]
+
+    bin_edges = hist[0][1]
 
     ets_hist_sum = np.sum(ets_hist, axis=0)
-    cumsum = np.cumsum(ets_hist_sum)
-    thr = bin_edges[np.searchsorted(cumsum, np.percentile(cumsum, 95))]
+    cumsum_percentile = np.cumsum(ets_hist_sum) / np.sum(ets_hist_sum) * 100
+    thr = bin_edges[len(cumsum_percentile[cumsum_percentile <= percentile])]
 
     return thr
 
