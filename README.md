@@ -13,6 +13,7 @@ Download and unzip the directory, open MATLAB, and then navigate to wherever you
 * Example parcellated resting fMRI BOLD time series from [here](https://www.dropbox.com/sh/tb694nmpu2lbpnc/AABKU_Mew7hyjtAC4ObzGVaKa?dl=0).
 * System labels for each brain region.
 * Analysis script.
+* Some helper functions.
 
 # what does the script do?
 1. Reads in the parcel time series data, generates edge time series, and calculates the root sum squared (RSS) amplitude at each frame. 
