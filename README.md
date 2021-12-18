@@ -4,7 +4,7 @@ Perform event detection, clustering, and FC prediction as in Betzel et al (2021)
 <img src="hypothesis-01.png" alt="hypothesis for how high amplitude co-fluctuations might contribute to FC"/>
 
 # dependencies and requirements
-This script uses MATLAB. It was tested using MATLAB 2020a on macOS Mojava 10.14.6. It requires no additional software packages.
+This script uses MATLAB. It was tested using MATLAB 2020a on macOS Mojave 10.14.6. It requires no additional software packages.
 
 # installation and usage
 Download and unzip the directory, open MATLAB, and then navigate to wherever you downloaded the files. You can run the script from within that directory. The example script uses the Generalized Louvain function for performing community detection. It can be downloaded [here](http://netwiki.amath.unc.edu/GenLouvain/GenLouvain).
