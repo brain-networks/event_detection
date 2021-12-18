@@ -1,7 +1,7 @@
 # event_detection
 Perform event detection, clustering, and FC prediction as in Betzel et al (2021):  Individualized event structure drives individual differences in whole-brain functional connectivity. 
 
-<hypothesis-01.png>
+<img src="hypothesis-01.png" alt="hypothesis for how high amplitude co-fluctuations might contribute to FC"/>
 
 # dependencies and requirements
 This script uses MATLAB. It was tested using MATLAB 2020a on macOS Mojava 10.14.6. It requires no additional software packages.
