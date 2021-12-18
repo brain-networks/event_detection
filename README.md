@@ -7,7 +7,7 @@ Perform event detection, clustering, and FC prediction as in Betzel et al (2021)
 This script uses MATLAB. It was tested using MATLAB 2020a on macOS Mojava 10.14.6. It requires no additional software packages.
 
 # installation and usage
-Download and unzip the directory, open MATLAB, and then navigate to wherever you downloaded the files. You can run the script from within that directory. The example script uses the Generalized Louvain function for performing community detection. It can be downloaded [here](http://netwiki.amath.unc.edu/GenLouvain/GenLouvain).   
+Download and unzip the directory, open MATLAB, and then navigate to wherever you downloaded the files. You can run the script from within that directory. The example script uses the Generalized Louvain function for performing community detection. It can be downloaded [here](http://netwiki.amath.unc.edu/GenLouvain/GenLouvain).
 
 # what is here
 * Example parcellated resting fMRI BOLD time series from [here](https://www.dropbox.com/sh/tb694nmpu2lbpnc/AABKU_Mew7hyjtAC4ObzGVaKa?dl=0).
